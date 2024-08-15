@@ -1,4 +1,5 @@
 const express = require("express");
+const router = express.Router();
 const {
   createWorkOut,
   getAllWorkOut,
@@ -6,7 +7,6 @@ const {
   deleteAsingleWorkOut,
   updateAsingleWorkOut,
 } = require("../controllers/workOutController");
-const router = express.Router();
 
 
 router.get("/", getAllWorkOut);

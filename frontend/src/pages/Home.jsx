@@ -8,9 +8,9 @@ const Home = () => {
   const { workouts, dispatch } = useWorkOutContext()
   useEffect(() => {
     const fetchworkouts = async () => {
-      const httpUrl = "http://localhost:3000";
+      const httpUrl = "http://localhost:3000/api/workouts";
       try {
-        const response = await fetch(`${httpUrl}/api/workouts`);
+        const response = await fetch(httpUrl);
         const json = await response.json();
         if (response.ok) {
           dispatch({type: 'SET_WORKOUTS', payload: json});
