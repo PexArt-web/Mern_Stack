@@ -3,14 +3,19 @@ import { useWorkOutContext } from "../hooks/useWorkoutContext"
 // componet
 import WorkoutDetails from "../components/WorkoutDetails";
 import WorkoutForm from "../components/WorkoutForm";
+import { useAuthContext } from "../hooks/useAuthContext"
 const Home = () => {
-  // const [workouts, setWorkouts] = useState(null);
   const { workouts, dispatch } = useWorkOutContext()
+  const { user } = useAuthContext()
   useEffect(() => {
     const fetchworkouts = async () => {
       const httpUrl = "http://localhost:3000/api/workouts";
       try {
-        const response = await fetch(httpUrl);
+        const response = await fetch(httpUrl, {
+          headers : {
+            "Authorization": `Bearer ${user.token}`
+          }
+        });
         const json = await response.json();
         if (response.ok) {
           dispatch({type: 'SET_WORKOUTS', payload: json});
@@ -19,8 +24,12 @@ const Home = () => {
         console.log(error);
       }
     };
-    fetchworkouts();
-  }, [dispatch]);
+
+    if(user){
+      fetchworkouts()
+    }
+    
+  }, [dispatch, user]);
   
 
   return (

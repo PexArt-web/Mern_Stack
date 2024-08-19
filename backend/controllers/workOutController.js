@@ -1,10 +1,12 @@
 const workout = require("../models/workoutModel");
 const mongoose = require("mongoose");
 
+
 const { log } = console
 const getAllWorkOut = async (req, res) => {
   try {
-    const getAllWorkout = await workout.find().sort({ createdAt: -1 });
+    const user_id = req.user._id
+    const getAllWorkout = await workout.find({user_id}).sort({ createdAt: -1 });
     res.status(200).json(getAllWorkout);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -46,7 +48,8 @@ const createWorkOut = async (req, res) => {
   }
   // 
   try {
-    const newWorkout = await workout.create({ title, load, reps });
+    const user_id = req.user._id 
+    const newWorkout = await workout.create({ title, load, reps , user_id });
     res.status(200).json(newWorkout);
   } catch (error) {
     log(`error saving documents ${error.message}`);
@@ -62,9 +65,9 @@ const deleteAsingleWorkOut = async (req, res) => {
   try {
     const deleteWorkOut = await workout.findByIdAndDelete(workoutId);
     if (!deleteWorkOut) {
-      res.status(404).json({ error: "no workout found" });
+     return res.status(404).json({ error: "no workout found" });
     }
-    res.status(200).json(deleteWorkOut);
+   return res.status(200).json(deleteWorkOut);
   } catch (error) {
     res.status(404).json({ error: "unable to delete workout" });
   }
